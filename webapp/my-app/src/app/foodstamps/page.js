@@ -47,7 +47,7 @@ function ResourceMap({ locations }) {
         {locations.map((loc) => (
           <Marker
             key={loc.id} width={40} anchor={[loc.lat, loc.lng]}
-            color={'#f4b400'} // Orange/Yellow marker for energy
+            color={'#db4437'} // Red marker for food/resources
             onClick={() => setSelected(loc)}
           />
         ))}
@@ -69,24 +69,24 @@ function ResourceMap({ locations }) {
   );
 }
 
-// --- Main Energy Page Component ---
-export default function EnergyPage() {
+// --- Main Food Stamps Page Component ---
+export default function FoodStampsPage() {
   const [zipcode, setZipcode] = useState("");
-  const [energyResults, setEnergyResults] = useState([]);
+  const [snapResults, setSnapResults] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
 
   const handleSearch = (e) => {
     e.preventDefault();
     setHasSearched(true);
     const allResources = placeholderResources[zipcode] || [];
-    const utilityResources = allResources.filter(res => res.category === "Utility Assistance");
-    setEnergyResults(utilityResources);
+    const foodResources = allResources.filter(res => res.category === "Food Assistance");
+    setSnapResults(foodResources);
   };
 
   return (
     <main className="flex min-h-screen flex-col items-center p-8 md:p-16 bg-gray-50">
       <div className="w-full max-w-5xl">
-
+        
         <div className="mb-8">
             <Link href="/" className="text-indigo-600 hover:text-indigo-800 font-semibold">
                 &larr; Back to Dashboard
@@ -94,9 +94,9 @@ export default function EnergyPage() {
         </div>
 
         <header className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">Energy & Utility Assistance</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-3">Food Assistance (SNAP)</h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Find programs to help with electricity, gas, and other utility bills near you.
+            Find SNAP / food stamp programs and enrollment offices near you.
           </p>
         </header>
 
@@ -117,19 +117,19 @@ export default function EnergyPage() {
           </form>
         </div>
 
-        <ResourceMap locations={energyResults} />
+        <ResourceMap locations={snapResults} />
 
-        {hasSearched && energyResults.length > 0 && (
+        {hasSearched && snapResults.length > 0 && (
           <div className="mb-12">
-            <h2 className="text-2xl font-semibold mb-4">Energy Assistance near "{zipcode}"</h2>
+            <h2 className="text-2xl font-semibold mb-4">SNAP / Food Assistance near "{zipcode}"</h2>
             <div className="space-y-4">
-              {energyResults.map((item) => (
-                <div key={item.id} className="bg-white p-4 rounded-lg shadow border-l-4 border-yellow-500">
+              {snapResults.map((item) => (
+                <div key={item.id} className="bg-white p-4 rounded-lg shadow border-l-4 border-green-500">
                   <h3 className="font-semibold text-lg text-gray-900">{item.name}</h3>
                   <p className="text-gray-600">{item.description}</p>
                   <p className="text-sm text-gray-500 mt-1">{item.address}</p>
                   <p className="text-sm text-gray-500">Phone: {item.phone}</p>
-                   <a href={item.website} target="_blank" rel="noopener noreferrer" className="text-sm text-yellow-600 hover:text-yellow-800 font-medium">
+                  <a href={item.website} target="_blank" rel="noopener noreferrer" className="text-sm text-green-600 hover:text-green-800 font-medium">
                     Visit Website &rarr;
                   </a>
                 </div>
@@ -138,8 +138,8 @@ export default function EnergyPage() {
           </div>
         )}
 
-        {hasSearched && energyResults.length === 0 && (
-          <p className="text-gray-500 text-center mt-4">No energy resources found for "{zipcode}".</p>
+        {hasSearched && snapResults.length === 0 && (
+          <p className="text-gray-500 text-center mt-4">No food assistance resources found for "{zipcode}".</p>
         )}
       </div>
     </main>
