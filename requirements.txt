@@ -1,0 +1,13 @@
+langchain
+langgraph
+langchain-groq
+langchain-community
+groq
+python-dotenv
+google-search-results
+wikipedia
+reportlab
+requests
+pydantic
+lxml
+streamlit
