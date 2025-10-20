@@ -85,8 +85,7 @@ def government_resource_search(query: str) -> str:
     result += "\n".join(f"{i+1}. {r}" for i, r in enumerate(matched_resources[:10]))
     return result
 
-class QuerySchema(BaseModel):
-    query: str
+
 
 
 def nonprofit_search(query: str) -> str:
@@ -159,6 +158,56 @@ def nonprofit_search(query: str) -> str:
     result += "\n".join(f"{i+1}. {r}" for i, r in enumerate(matched_resources[:10]))
     return result
 
+def financial_info_explainer(topic: str) -> str:
+    """Provide basic explanations for mortgages, budgeting, bills, and general housing finance."""
+    topic_lower = topic.lower()
+
+    if "mortgage" in topic_lower:
+        return (
+            "**Mortgage Basics:**\n"
+            "A mortgage is a type of loan used to buy a home. You repay it monthly, typically over 15–30 years, "
+            "with interest. Your payment often includes:\n"
+            "- **Principal:** The amount borrowed.\n"
+            "- **Interest:** What the bank charges for lending the money.\n"
+            "- **Taxes and Insurance:** Often included in your monthly bill.\n"
+            "Tip: Fixed-rate mortgages keep the same payment, while adjustable-rate ones can change over time."
+        )
+
+    elif "budget" in topic_lower or "money" in topic_lower:
+        return (
+            "**Budgeting Basics:**\n"
+            "Budgeting helps you track where your money goes. A simple 50/30/20 rule works for many:\n"
+            "- 50% Needs (rent, groceries, utilities)\n"
+            "- 30% Wants (entertainment, hobbies)\n"
+            "- 20% Savings/Debt Payments\n"
+            "Use tools like Mint or YNAB to visualize your spending."
+        )
+
+    elif "bills" in topic_lower or "utilities" in topic_lower:
+        return (
+            "**Understanding Bills and Utilities:**\n"
+            "Common monthly bills include rent/mortgage, electricity, water, internet, and phone. "
+            "Track due dates to avoid late fees and use autopay where possible. "
+            "If bills are high, contact your provider—many offer hardship programs or payment plans."
+        )
+
+    elif "rent" in topic_lower or "landlord" in topic_lower:
+        return (
+            "**Discussing Rent and Housing Costs:**\n"
+            "Be polite and professional with landlords. When negotiating:\n"
+            "- Research similar rentals in your area.\n"
+            "- Offer a longer lease in exchange for stability.\n"
+            "- Document all communication.\n"
+            "If rent becomes unaffordable, contact your local housing authority or a nonprofit like United Way for support."
+        )
+
+    else:
+        return (
+            "I can explain topics like mortgages, rent, bills, budgeting, and saving. "
+            "Try asking something like 'Explain how a mortgage works' or 'How should I plan for monthly bills?'"
+        )
+
+       
 single_agent_prompt="""
 You are a Untapped Resource Assistant Agent for housing resources.
 You help users find both government and nonprofit resources based on their needs.
@@ -170,8 +219,12 @@ Follow this process:
 4. Always output a short structured summary:
    - Government Resources
    - Nonprofit Resources
+   -Financial Info (if relevant)
    - Next Steps
 """
+
+class QuerySchema(BaseModel):
+    query: str
 
 class ResourceAgent:
     def __init__(self):
@@ -195,13 +248,19 @@ class ResourceAgent:
                 args_schema=QuerySchema
             ),
             Tool(
+                name="financial_info_explainer",
+                description="Explains mortgages, budgeting, rent, and other basic financial concepts.",
+                func=financial_info_explainer,
+                args_schema=QuerySchema
+            ),
+            Tool(
                 name="google_search",
                 description="Finds the latest program info, eligibility updates, or contact info.",
                 func=self.search.run,
                 args_schema=QuerySchema
             )
         ]
-           
+
         self.agent = create_react_agent(
             model=self.model,
             tools=self.tools,
@@ -211,15 +270,14 @@ class ResourceAgent:
     def find_resources(self, query: str) -> str:
         if not query:
             raise ValueError("Please provide a description of your situation or needs.")
-        
+
         response = self.agent.invoke({"messages": [("user", query)]})
         final_message = response["messages"][-1]
-        
-        # Check if the final message has content and is not just a final ToolCall
+
         if final_message.content:
-             return final_message.content
+            return final_message.content
         else:
-             for msg in reversed(response["messages"]):
-                 if msg.content:
-                     return msg.content
-             return "Agent concluded the task but did not provide a final answer."
+            for msg in reversed(response["messages"]):
+                if msg.content:
+                    return msg.content
+            return "Agent concluded the task but did not provide a final answer."
