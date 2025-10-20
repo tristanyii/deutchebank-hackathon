@@ -109,7 +109,7 @@ export default function HomePage() {
       <div className="w-full max-w-5xl">
         
         <header className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">Resource Connect</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-3">Excess</h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Connecting underserved communities with unclaimed resources. Find housing, food, and energy support.
           </p>
