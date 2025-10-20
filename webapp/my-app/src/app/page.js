@@ -2,12 +2,13 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Map, Marker, Overlay } from "pigeon-maps"; // Pigeon Maps import
+import Link from 'next/link'; // <-- 1. IMPORT LINK
+import { Map, Marker, Overlay } from "pigeon-maps";
 import './globals.css';
 
 // --- All Data is now in this file for simplicity ---
 
-// 1. Placeholder Housing Data with Coordinates
+// Placeholder Housing Data with Coordinates
 const placeholderHousingData = {
   "30303": [
     { id: 1, type: 'housing', name: "Downtown Affordable Housing", address: "123 Peachtree St, Atlanta, GA 30303", phone: "404-555-1000", lat: 33.7563, lng: -84.3877 },
@@ -18,7 +19,7 @@ const placeholderHousingData = {
   ]
 };
 
-// 2. Placeholder Resource Data with Coordinates
+// Placeholder Resource Data with Coordinates
 const placeholderResources = {
   "30303": [
     { id: 4, category: "Food Assistance", name: "Fulton County SNAP Office", description: "SNAP applications and info.", address: "123 Main St, Atlanta, GA", phone: "404-555-1212", lat: 33.7537, lng: -84.3880 },
@@ -31,8 +32,8 @@ const placeholderResources = {
 
 // --- Map Component (Integrated into this file) ---
 function PigeonMapComponent({ locations }) {
-  const [center, setCenter] = useState([33.7490, -84.3880]); // Default: Atlanta
-  const [zoom, setZoom] = useState(13);
+  const [center, setCenter] = useState([37.0902, -95.7129]); // Default to center of US
+  const [zoom, setZoom] = useState(4);
   const [selected, setSelected] = useState(null);
 
   useEffect(() => {
@@ -44,26 +45,19 @@ function PigeonMapComponent({ locations }) {
   }, [locations]);
 
   if (!locations || locations.length === 0) {
-    return null; // Don't show a map if there are no results
+    return null;
   }
 
   return (
     <div className="mb-12 rounded-lg overflow-hidden shadow-lg" style={{ height: '400px', width: '100%' }}>
       <Map
-        height={400}
-        center={center}
-        zoom={zoom}
-        onBoundsChanged={({ center, zoom }) => {
-          setCenter(center);
-          setZoom(zoom);
-        }}
+        height={400} center={center} zoom={zoom}
+        onBoundsChanged={({ center, zoom }) => { setCenter(center); setZoom(zoom); }}
       >
         {locations.map((loc) => (
           <Marker
-            key={loc.id}
-            width={40}
-            anchor={[loc.lat, loc.lng]}
-            color={loc.type === 'housing' ? '#1a73e8' : '#db4437'} // Blue for housing, Red for resources
+            key={loc.id} width={40} anchor={[loc.lat, loc.lng]}
+            color={loc.type === 'housing' ? '#1a73e8' : '#db4437'}
             onClick={() => setSelected(loc)}
           />
         ))}
@@ -101,7 +95,6 @@ export default function HomePage() {
     setResourceResults(otherResources);
   };
   
-  // Combine all locations for the map
   const allLocations = [...housingResults, ...resourceResults];
 
   return (
@@ -116,43 +109,42 @@ export default function HomePage() {
         </header>
 
         <div className="bg-white p-6 rounded-lg shadow-md mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-            <form onSubmit={handleSearch} className="md:col-span-2">
-              <label htmlFor="zipcode" className="block text-sm font-medium text-gray-700 mb-1">
-                Find resources near you
-              </label>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  name="zipcode"
-                  id="zipcode"
-                  value={zipcode}
-                  onChange={(e) => setZipcode(e.target.value)}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
-                  placeholder="Enter your zipcode (e.g., 30303)"
-                />
-                <button
-                  type="submit"
-                  className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Search
-                </button>
-              </div>
-            </form>
-            <div className="text-center md:border-l md:border-gray-200 md:pl-6">
-              <p className="text-sm font-medium text-gray-700 mb-1">Need help by phone?</p>
-              <a href="tel: (205)-293-8808" className="text-lg font-semibold text-indigo-600 hover:text-indigo-500">
-                Call (205)-293-8808
-              </a>
-              <p className="text-xs text-gray-500 mt-1">(Voice AI available)</p>
-            </div>
-          </div>
+            {/* Form and Call section remain the same */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+             <form onSubmit={handleSearch} className="md:col-span-2">
+               <label htmlFor="zipcode" className="block text-sm font-medium text-gray-700 mb-1">
+                 Find resources near you
+               </label>
+               <div className="flex gap-2">
+                 <input
+                   type="text"
+                   name="zipcode"
+                   id="zipcode"
+                   value={zipcode}
+                   onChange={(e) => setZipcode(e.target.value)}
+                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
+                   placeholder="Enter your zipcode (e.g., 30303)"
+                 />
+                 <button
+                   type="submit"
+                   className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                 >
+                   Search
+                 </button>
+               </div>
+             </form>
+             <div className="text-center md:border-l md:border-gray-200 md:pl-6">
+               <p className="text-sm font-medium text-gray-700 mb-1">Need help by phone?</p>
+               <a href="tel: (205)-293-8808" className="text-lg font-semibold text-indigo-600 hover:text-indigo-500">
+                 Call (205)-293-8808
+               </a>
+               <p className="text-xs text-gray-500 mt-1">(Voice AI available)</p>
+             </div>
+           </div>
         </div>
 
-        {/* --- Map Display --- */}
         <PigeonMapComponent locations={allLocations} />
 
-        {/* --- Housing Results List --- */}
         {housingResults.length > 0 && (
           <div className="mb-12">
             <h2 className="text-2xl font-semibold mb-4">Low-Cost Housing near "{zipcode}"</h2>
@@ -168,7 +160,6 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* --- Other Resources List --- */}
         {resourceResults.length > 0 && (
           <div className="mb-12">
             <h2 className="text-2xl font-semibold mb-4">Food & Utility Resources near "{zipcode}"</h2>
@@ -186,21 +177,24 @@ export default function HomePage() {
           </div>
         )}
         
-        {/* --- Static Resource Cards (Restored) --- */}
+        {/* --- Static Resource Cards (MODIFIED) --- */}
         <div>
           <h2 className="text-2xl font-semibold text-center mb-6">
             Browse Resources by Category
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <ResourceCard
+              href="/housing"
               title="Housing Assistance"
               description="Find low-cost housing, rent support, and shelter information."
             />
             <ResourceCard
+              href="/foodstamps"
               title="Food Stamps (SNAP)"
               description="Check eligibility and find application help for food assistance."
             />
             <ResourceCard
+              href="/energy"
               title="Energy & Utilities"
               description="Get help with energy bills and find low-cost utility programs."
             />
@@ -212,19 +206,17 @@ export default function HomePage() {
   );
 }
 
-// --- Reusable ResourceCard component (Restored) ---
-function ResourceCard({ title, description }) {
+// --- Reusable ResourceCard component (MODIFIED) ---
+// Now accepts an 'href' prop and uses Next.js's Link component
+function ResourceCard({ title, description, href = "#" }) { // Default href to avoid errors
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
-      <p className="text-gray-600">{description}</p>
-      <a 
-        href="#" 
-        className="text-indigo-600 hover:text-indigo-500 font-semibold mt-4 inline-block"
-      >
-        Learn more &rarr;
-      </a>
-    </div>
+    <Link href={href} className="block p-6 bg-white rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-transform duration-200">
+        <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
+        <p className="text-gray-600">{description}</p>
+        <div className="text-indigo-600 font-semibold mt-4 inline-block">
+          Learn more &rarr;
+        </div>
+    </Link>
   );
 }
 
