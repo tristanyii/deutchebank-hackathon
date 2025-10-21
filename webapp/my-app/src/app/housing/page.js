@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Map, Marker, Overlay } from "pigeon-maps";
-import './globals.css';
+import '../globals.css';
 
 // --- Placeholder Housing Data with Coordinates ---
 // This contains only the housing data needed for this page.

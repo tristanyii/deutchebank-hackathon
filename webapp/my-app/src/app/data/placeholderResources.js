@@ -1,5 +1,8 @@
 // src/app/data/placeholderResources.js
 export const placeholderResources = {
+  // --- REAL DATA ADDED BELOW ---
+  
+  // --- ORIGINAL MOCK DATA ---
   "30303": [
     {
       id: 1,
@@ -9,8 +12,8 @@ export const placeholderResources = {
       address: "123 Main St, Atlanta, GA 30303",
       phone: "404-555-1212",
       website: "https://dfcs.georgia.gov/",
-      lat: 33.7537, // Added
-      lng: -84.3880  // Added
+      lat: 33.7537,
+      lng: -84.3880
     },
     {
       id: 2,
@@ -20,8 +23,8 @@ export const placeholderResources = {
       address: "456 Central Ave, Atlanta, GA 30303",
       phone: "404-555-4545",
       website: "https://www.pca-atl.org/services/energy-assistance/",
-      lat: 33.7510, // Added
-      lng: -84.3900  // Added
+      lat: 33.7510,
+      lng: -84.3900
     },
     {
       id: 3,
@@ -31,8 +34,8 @@ export const placeholderResources = {
       address: "789 Pine St, Atlanta, GA 30303",
       phone: "404-555-7878",
       website: "#",
-      lat: 33.7589, // Added
-      lng: -84.3838  // Added
+      lat: 33.7589,
+      lng: -84.3838
     }
   ],
   "10001": [
@@ -44,8 +47,8 @@ export const placeholderResources = {
       address: "111 W 34th St, New York, NY 10001",
       phone: "212-555-1212",
       website: "https://www.nyc.gov/snap",
-      lat: 40.7498, // Added
-      lng: -73.9875  // Added
+      lat: 40.7498,
+      lng: -73.9875
     },
     {
       id: 5,
@@ -55,8 +58,9 @@ export const placeholderResources = {
       address: "222 8th Ave, New York, NY 10001",
       phone: "212-555-4545",
       website: "https://otda.ny.gov/programs/heap/",
-      lat: 40.7449, // Added
-      lng: -73.9982  // Added
+      lat: 40.7449,
+      lng: -73.9982
     }
   ]
 };
+

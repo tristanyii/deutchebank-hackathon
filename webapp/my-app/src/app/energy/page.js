@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Map, Marker, Overlay } from "pigeon-maps";
-import './globals.css';
+import '../globals.css';
 
 // --- Placeholder Resource Data with Coordinates ---
 // In a real app, this would be in a shared file.

@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link'; // <-- 1. IMPORT LINK
+import Link from 'next/link';
 import { Map, Marker, Overlay } from "pigeon-maps";
 import './globals.css';
 
@@ -49,7 +49,7 @@ function PigeonMapComponent({ locations }) {
   }
 
   return (
-    <div className="mb-12 rounded-lg overflow-hidden shadow-lg" style={{ height: '400px', width: '100%' }}>
+    <div className="mb-12 rounded-lg overflow-hidden shadow-lg border border-stone-200" style={{ height: '400px', width: '100%' }}>
       <Map
         height={400} center={center} zoom={zoom}
         onBoundsChanged={({ center, zoom }) => { setCenter(center); setZoom(zoom); }}
@@ -57,7 +57,7 @@ function PigeonMapComponent({ locations }) {
         {locations.map((loc) => (
           <Marker
             key={loc.id} width={40} anchor={[loc.lat, loc.lng]}
-            color={loc.type === 'housing' ? '#1a73e8' : '#db4437'}
+            color={loc.type === 'housing' ? '#008080' : '#c53030'} // Teal for housing, Red for resources
             onClick={() => setSelected(loc)}
           />
         ))}
@@ -65,9 +65,9 @@ function PigeonMapComponent({ locations }) {
         {selected && (
           <Overlay anchor={[selected.lat, selected.lng]} offset={[120, 70]}>
             <div className="bg-white p-3 rounded-lg shadow-xl border" style={{ minWidth: '200px' }}>
-              <h4 className="font-bold text-md text-gray-900">{selected.name}</h4>
-              <p className="text-sm text-gray-600">{selected.address}</p>
-              <p className="text-sm text-gray-500">{selected.phone}</p>
+              <h4 className="font-bold text-md text-stone-800">{selected.name}</h4>
+              <p className="text-sm text-stone-600">{selected.address}</p>
+              <p className="text-sm text-stone-500">{selected.phone}</p>
               <button onClick={() => setSelected(null)} className="text-xs font-bold text-red-600 mt-1">
                 Close
               </button>
@@ -98,62 +98,61 @@ export default function HomePage() {
   const allLocations = [...housingResults, ...resourceResults];
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-8 md:p-16 bg-gray-50">
+    <main className="flex min-h-screen flex-col items-center p-8 md:p-16 bg-stone-50 text-stone-800">
       <div className="w-full max-w-5xl">
         
         <header className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">Excess</h1>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <h1 className="text-5xl font-bold text-stone-900 mb-3 tracking-tight">Excess</h1>
+          <p className="text-lg text-stone-600 max-w-3xl mx-auto">
             Connecting underserved communities with unclaimed resources. Find housing, food, and energy support.
           </p>
         </header>
 
-        <div className="bg-white p-6 rounded-lg shadow-md mb-12">
-            {/* Form and Call section remain the same */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-             <form onSubmit={handleSearch} className="md:col-span-2">
-               <label htmlFor="zipcode" className="block text-sm font-medium text-gray-700 mb-1">
-                 Find resources near you
-               </label>
-               <div className="flex gap-2">
-                 <input
-                   type="text"
-                   name="zipcode"
-                   id="zipcode"
-                   value={zipcode}
-                   onChange={(e) => setZipcode(e.target.value)}
-                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
-                   placeholder="Enter your zipcode (e.g., 30303)"
-                 />
-                 <button
-                   type="submit"
-                   className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                 >
-                   Search
-                 </button>
-               </div>
-             </form>
-             <div className="text-center md:border-l md:border-gray-200 md:pl-6">
-               <p className="text-sm font-medium text-gray-700 mb-1">Need help by phone?</p>
-               <a href="tel: (205)-293-8808" className="text-lg font-semibold text-indigo-600 hover:text-indigo-500">
-                 Call (205)-293-8808
-               </a>
-               <p className="text-xs text-gray-500 mt-1">(Voice AI available)</p>
-             </div>
-           </div>
+        <div className="bg-white p-6 rounded-lg shadow-md mb-12 border border-stone-200">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+            <form onSubmit={handleSearch} className="md:col-span-2">
+              <label htmlFor="zipcode" className="block text-sm font-medium text-stone-700 mb-1">
+                Find resources near you
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  name="zipcode"
+                  id="zipcode"
+                  value={zipcode}
+                  onChange={(e) => setZipcode(e.target.value)}
+                  className="block w-full rounded-md border-stone-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2 border"
+                  placeholder="Enter your zipcode (e.g., 30303)"
+                />
+                <button
+                  type="submit"
+                  className="rounded-md bg-teal-600 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600"
+                >
+                  Search
+                </button>
+              </div>
+            </form>
+            <div className="text-center md:border-l md:border-stone-200 md:pl-6">
+              <p className="text-sm font-medium text-stone-700 mb-1">Need help by phone?</p>
+              <a href="tel: (205)-293-8808" className="text-lg font-semibold text-teal-600 hover:text-teal-700">
+                Call (205)-293-8808
+              </a>
+              <p className="text-xs text-stone-500 mt-1">(Voice AI available)</p>
+            </div>
+          </div>
         </div>
 
         <PigeonMapComponent locations={allLocations} />
 
         {housingResults.length > 0 && (
           <div className="mb-12">
-            <h2 className="text-2xl font-semibold mb-4">Low-Cost Housing near "{zipcode}"</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-stone-800">Low-Cost Housing near "{zipcode}"</h2>
             <div className="space-y-4">
               {housingResults.map((item) => (
-                <div key={item.id} className="bg-white p-4 rounded-lg shadow">
-                  <h3 className="font-semibold text-lg text-gray-900">{item.name}</h3>
-                  <p className="text-gray-600">{item.address}</p>
-                  <p className="text-sm text-gray-500 mt-1">Phone: {item.phone}</p>
+                <div key={item.id} className="bg-white p-4 rounded-lg shadow border border-stone-200">
+                  <h3 className="font-semibold text-lg text-stone-900">{item.name}</h3>
+                  <p className="text-stone-600">{item.address}</p>
+                  <p className="text-sm text-stone-500 mt-1">Phone: {item.phone}</p>
                 </div>
               ))}
             </div>
@@ -162,24 +161,23 @@ export default function HomePage() {
 
         {resourceResults.length > 0 && (
           <div className="mb-12">
-            <h2 className="text-2xl font-semibold mb-4">Food & Utility Resources near "{zipcode}"</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-stone-800">Food & Utility Resources near "{zipcode}"</h2>
             <div className="space-y-4">
               {resourceResults.map((item) => (
-                <div key={item.id} className="bg-white p-4 rounded-lg shadow border-l-4 border-indigo-500">
-                  <span className="inline-flex items-center rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10 mb-2">
+                <div key={item.id} className="bg-white p-4 rounded-lg shadow border-l-4 border-teal-500">
+                  <span className="inline-flex items-center rounded-md bg-teal-50 px-2 py-1 text-xs font-medium text-teal-700 ring-1 ring-inset ring-teal-700/10 mb-2">
                     {item.category}
                   </span>
-                  <h3 className="font-semibold text-lg text-gray-900">{item.name}</h3>
-                  <p className="text-gray-600">{item.description}</p>
+                  <h3 className="font-semibold text-lg text-stone-900">{item.name}</h3>
+                  <p className="text-stone-600">{item.description}</p>
                 </div>
               ))}
             </div>
           </div>
         )}
         
-        {/* --- Static Resource Cards (MODIFIED) --- */}
         <div>
-          <h2 className="text-2xl font-semibold text-center mb-6">
+          <h2 className="text-2xl font-semibold text-center mb-6 text-stone-800">
             Browse Resources by Category
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -206,17 +204,18 @@ export default function HomePage() {
   );
 }
 
-// --- Reusable ResourceCard component (MODIFIED) ---
-// Now accepts an 'href' prop and uses Next.js's Link component
-function ResourceCard({ title, description, href = "#" }) { // Default href to avoid errors
+// --- Reusable ResourceCard component ---
+function ResourceCard({ title, description, href = "#" }) {
   return (
-    <Link href={href} className="block p-6 bg-white rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-transform duration-200">
-        <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
-        <p className="text-gray-600">{description}</p>
-        <div className="text-indigo-600 font-semibold mt-4 inline-block">
+    <Link href={href} className="block p-6 bg-white rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-transform duration-200 border-t-4 border-teal-600">
+        <h3 className="text-xl font-semibold text-stone-900 mb-2">{title}</h3>
+        <p className="text-stone-600">{description}</p>
+        <div className="text-teal-600 font-semibold mt-4 inline-block">
           Learn more &rarr;
         </div>
     </Link>
   );
 }
+
+
 
