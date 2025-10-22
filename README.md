@@ -1,4 +1,6 @@
-# Excess, A multi-agent AI system designed to help users discover government and non-government resources based on their specific situation and needs.
+# Excess
+
+A multi-agent AI system designed to help users discover government and non-government resources based on their specific situation and needs.
 
 ## 🚀 Quick Start
 
