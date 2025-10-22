@@ -1,16 +1,48 @@
-# Flask Backend for Retell AI Integration - Anthony Persona
+# Excess - AI Voice Support Line Backend
 
-This Flask backend integrates with Retell AI to provide a voice-first U.S. benefits hotline using the Anthony persona for Sharing Excess.
+**🏆 1st Place Winner - Deutsche Bank Hackathon 2024**
 
-## Features
+This Flask backend powers **Excess**, an AI-powered voice support line that helps underrepresented communities discover verified local aid programs through simple, human-like interactions.
 
-- **Anthony Persona**: Multilingual, voice-first U.S. benefits assistant
-- **Retell AI Webhook Integration**: Handles voice call events from Retell AI
-- **Dynamic Conversation Flow**: Collects user info step-by-step (need, location, name, age, income)
-- **Multilingual Support**: Detects and responds in 10 languages (English, Spanish, French, German, Hindi, Russian, Portuguese, Japanese, Italian, Dutch)
+## 🎯 **Project Overview**
+
+**Excess** addresses a critical problem: millions of people across the U.S. qualify for housing, food, and energy assistance, yet many never receive it because the information is confusing, scattered, or entirely offline.
+
+### **Our Solution:**
+- **🎙️ Voice-First Interface**: Makes aid discovery accessible to people without internet access or technology experience
+- **🌍 Multilingual Support**: Serves diverse and rural communities in their native languages  
+- **🗺️ Real-Time Visualization**: Web app shows nearby resources and assistance options
+- **💰 Cost Effective**: Operates at ~60% lower cost than traditional human-operated support lines
+
+### **How It Works:**
+1. **Voice Input**: Users call the support line and speak naturally
+2. **AI Processing**: Anthony (our AI agent) understands their needs in multiple languages
+3. **Resource Matching**: System identifies relevant U.S. government and nonprofit programs
+4. **Guided Assistance**: Provides step-by-step guidance and application links
+5. **Visualization**: Web app shows nearby resources on an interactive map
+
+## 🔧 **This Flask Backend**
+
+This backend is the **brain** of the Excess voice system, handling:
+- **Retell AI Integration**: Processes voice calls and SMS
+- **Anthony Persona**: Multilingual AI agent for natural conversations
+- **Resource Matching**: Connects users to LIHEAP, Housing, and Benefits programs
+- **Conversation Management**: Tracks user needs and provides personalized assistance
+
+## 🚀 **Key Features**
+
+### **Anthony - The AI Agent**
+- **🎙️ Voice-First Design**: Natural conversations without internet dependency
+- **🌍 Multilingual Support**: 10 languages (English, Spanish, French, German, Hindi, Russian, Portuguese, Japanese, Italian, Dutch)
+- **🧠 Smart Conversation Flow**: Collects user info step-by-step (need, location, name, age, income)
+- **⚡ Real-Time Processing**: Instant responses through Retell AI integration
+- **🚨 Urgent Situation Handling**: Empathetic responses for shutoffs/evictions
+
+### **Technical Capabilities**
+- **Retell AI Webhook Integration**: Handles voice call events seamlessly
 - **U.S. Resource Matching**: Provides LIHEAP, Housing Resources, and Unclaimed Benefits Finder
 - **Voice-Optimized Responses**: Natural speech formatting at 1.3x speed
-- **Urgent Situation Handling**: Empathetic responses for shutoffs/evictions
+- **Cost Efficiency**: ~60% lower operational costs than human support lines
 
 ## Endpoints
 
@@ -30,9 +62,15 @@ This Flask backend integrates with Retell AI to provide a voice-first U.S. benef
    cd flask_backend
    pip install -r requirements.txt
    ```
+   
+   **Note**: The Flask backend requires the same dependencies as your main project. If you get import errors, install the main project dependencies:
+   ```bash
+   # From the root directory
+   pip install langchain langgraph langchain-groq langchain-community groq python-dotenv google-search-results wikipedia reportlab requests pydantic lxml streamlit
+   ```
 
 2. **Environment Variables**:
-   Make sure your `.env` file in the parent directory contains:
+   The Flask backend uses the same `.env` file as your main project. Make sure your `.env` file in the **root directory** contains:
    ```
    GROQ_API_KEY=your_groq_api_key
    SERP_API_KEY=your_serp_api_key
@@ -40,7 +78,14 @@ This Flask backend integrates with Retell AI to provide a voice-first U.S. benef
 
 3. **Run the Server**:
    ```bash
+   # Option 1: Use the startup script
+   ./start.sh
+   
+   # Option 2: Run directly
    python run_server.py
+   
+   # Option 3: Run with Flask directly
+   python app.py
    ```
 
 ## Retell AI Configuration
@@ -84,7 +129,14 @@ https://your-domain.com/retell/webhook
 
 ## Testing
 
-Test Anthony persona conversation flow:
+### **Quick Test**
+```bash
+# Run the integration test suite
+cd flask_backend
+python test_integration.py
+```
+
+### **Manual Testing**
 ```bash
 # Test full conversation flow
 curl -X POST http://localhost:5000/test-anthony \
@@ -95,27 +147,45 @@ curl -X POST http://localhost:5000/test-anthony \
 curl -X POST http://localhost:5000/test-agent \
   -H "Content-Type: application/json" \
   -d '{"query": "I need help with energy bills", "call_id": "test-456"}'
+
+# Test health check
+curl http://localhost:5000/health
 ```
 
-## U.S. Resources Provided
+### **Troubleshooting**
+If you get import errors:
+1. Make sure you're in the `flask_backend` directory
+2. Install dependencies from the root directory: `pip install -r ../requirements.txt`
+3. Check that your `.env` file is in the root directory with valid API keys
+4. Try running: `python -c "from app import app; print('Import successful')"`
 
-Anthony always provides these three core resources:
+## 🏛️ **U.S. Resources Provided**
 
-1. **LIHEAP (Energy Bill Help)**
-   - Helps pay heating or cooling bills
-   - Based on ZIP and income eligibility
-   - Link: https://www.acf.hhs.gov/ocs/energy-assistance
-   - Requirements: photo ID, proof of address, recent bill, income proof
+Anthony always provides these three core resources to ensure comprehensive assistance:
 
-2. **Housing Resources**
-   - HUD helps find rental and affordable housing
-   - State-specific housing programs
-   - Link: https://www.hud.gov/states
+### **1. LIHEAP (Energy Bill Help)**
+- **Purpose**: Helps pay heating or cooling bills
+- **Eligibility**: Based on ZIP code and income
+- **Link**: https://www.acf.hhs.gov/ocs/energy-assistance
+- **Requirements**: photo ID, proof of address, recent bill, income proof
 
-3. **Unclaimed Benefits Finder**
-   - Checks for food, health, cash aid, tax credits
-   - Quick and private screening
-   - Link: https://www.benefits.gov/benefit-finder
+### **2. Housing Resources**
+- **Purpose**: HUD helps find rental and affordable housing
+- **Coverage**: State-specific housing programs
+- **Link**: https://www.hud.gov/states
+
+### **3. Unclaimed Benefits Finder**
+- **Purpose**: Checks for food, health, cash aid, tax credits
+- **Process**: Quick and private screening
+- **Link**: https://www.benefits.gov/benefit-finder
+
+## 🎯 **Impact & Results**
+
+- **🏆 1st Place**: Deutsche Bank Hackathon 2024
+- **💰 Cost Reduction**: ~60% lower operational costs than human support lines
+- **🌍 Accessibility**: Serves communities without internet access
+- **📞 Voice-First**: Natural conversation interface for all users
+- **🔍 Comprehensive**: Covers energy, housing, food, and financial assistance
 
 ## Response Formatting
 
@@ -130,3 +200,85 @@ The backend automatically formats responses for voice by:
 - Graceful handling of agent unavailability
 - Fallback responses for processing errors
 - Comprehensive logging for debugging
+
+## Common Issues & Solutions
+
+### **Import Errors**
+```
+ModuleNotFoundError: No module named 'langchain'
+```
+**Solution**: Install dependencies from root directory
+```bash
+cd /Users/tristanyi/deutchebank-hackathon
+pip install -r requirements.txt
+```
+
+### **Environment Variables Not Found**
+```
+ValueError: GROQ_API_KEY and SERP_API_KEY are required in .env file
+```
+**Solution**: Ensure `.env` file is in the root directory with valid API keys
+
+### **Port Already in Use**
+```
+OSError: [Errno 48] Address already in use
+```
+**Solution**: Kill existing process or use different port
+```bash
+lsof -ti:5000 | xargs kill -9
+# Or set different port: PORT=5001 python run_server.py
+```
+
+### **Path Issues**
+```
+ImportError: cannot import name 'ResourceAgent'
+```
+**Solution**: Run from flask_backend directory
+```bash
+cd flask_backend
+python run_server.py
+```
+
+## File Structure
+```
+flask_backend/
+├── app.py                 # Main Flask application with Anthony persona
+├── utils.py              # Utility functions for voice formatting
+├── config.py             # Configuration settings
+├── requirements.txt      # Flask-specific dependencies
+├── run_server.py         # Server runner script
+├── deploy.py            # Deployment helper script
+├── test_integration.py   # Integration testing script
+├── start.sh             # Easy startup script
+└── README.md            # This documentation
+```
+
+## 🛠️ **Dependencies**
+The Flask backend requires these packages (installed from root directory):
+- `flask` - Web framework
+- `requests` - HTTP requests
+- `python-dotenv` - Environment variables
+- `langchain` - AI agent framework
+- `langgraph` - Agent orchestration
+- `langchain-groq` - Groq LLM integration
+- `langchain-community` - Community tools
+- `groq` - Groq API client
+- `google-search-results` - Search functionality
+- `wikipedia` - Wikipedia integration
+- `reportlab` - PDF generation
+- `pydantic` - Data validation
+- `lxml` - XML processing
+
+## 👥 **Team**
+**Excess** was created by the winning team at Deutsche Bank Hackathon 2024:
+- **Uttam Dev Sapkota**
+- **Anna Benbow** 
+- **Tahia Islam**
+- **Rama Yakkala**
+
+**Mentors**: Meghna Gaddam and Anil Pandya
+
+## 🎉 **Recognition**
+- **🏆 1st Place Winner** - Deutsche Bank Hackathon 2024
+- **💡 Innovation Award** - AI-powered accessibility solution
+- **🌍 Social Impact** - Serving underrepresented communities
